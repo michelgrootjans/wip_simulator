@@ -1,0 +1,9 @@
+version: '3'
+services:
+  simulator:
+    image: ruby:2.3.3
+    volumes:
+    - .bundle:/usr/local/bundle
+    - ./code:/simulator
+    working_dir: /simulator
+    command: sh run.sh
