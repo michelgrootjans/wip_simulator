@@ -1,7 +1,7 @@
 class Story
-  attr_accessor :name
+  attr_accessor :name, :development, :review, :qa
 
   def to_s
-    name
+    "#{development}/#{review}/#{qa}: #{name}"
   end
 end
