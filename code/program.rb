@@ -1,7 +1,8 @@
 Dir["models/*.rb"].each {|file| require_relative file }
-Dir["factories/*.rb"].each {|file| require_relative file }
 include FactoryBot::Syntax::Methods
 
-build_list(:story, 10).each do |story|
-  puts story
-end
+backlog = build_list(:story, 10)
+team = build_list(:team_member, 3, role: "developer") + build_list(:team_member, 1, role: "qa")
+
+backlog.each{|story| puts story}
+team.each{|member| puts member}
