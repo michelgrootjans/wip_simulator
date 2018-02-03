@@ -1,9 +1,8 @@
 class TeamMember
-  attr_accessor :name, :role
-
-
+  attr_accessor :name
+  
   def to_s
-    "#{name} - #{role}"
+    name
   end
 
 end

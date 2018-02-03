@@ -1,6 +1,7 @@
+
 describe "a new test" do
 
   it "should work" do
-    expect(true).to be(true)
+    developer = build(:story)
   end
 end
