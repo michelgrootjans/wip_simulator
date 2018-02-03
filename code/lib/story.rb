@@ -1,17 +1,17 @@
-class Story
-  attr_accessor :name
+# class Story
+#   attr_accessor :name
 
-  def to_s
-    name
-  end
-end
+#   def to_s
+#     name
+#   end
+# end
 
-require 'factory_bot'
-require 'faker'
+# require 'factory_bot'
+# require 'faker'
 
-FactoryBot.define do
-  factory :story do
-    name { Faker::Hacker.say_something_smart }
-  end
+# FactoryBot.define do
+#   factory :story do
+#     name { Faker::Hacker.say_something_smart }
+#   end
 
-end
+# end

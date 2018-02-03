@@ -1,18 +1,18 @@
-class TeamMember
-  attr_accessor :name
+# class TeamMember
+#   attr_accessor :name
   
-  def to_s
-    name
-  end
+#   def to_s
+#     name
+#   end
 
-end
+# end
 
-require 'factory_bot'
-require 'faker'
+# require 'factory_bot'
+# require 'faker'
 
-FactoryBot.define do
-  factory :team_member do
-    name { Faker::Name.name }
-  end
+# FactoryBot.define do
+#   factory :team_member do
+#     name { Faker::Name.name }
+#   end
 
-end
+# end
