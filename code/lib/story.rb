@@ -31,7 +31,7 @@ class Story
     end
   end
 
-  def do_work(type = :development)
+  def do_work(type)
     @actual_work[type] += 1 if ready_for?(type) || in_progress_for?(type)
   end
 
@@ -43,11 +43,11 @@ class Story
     raise 'unexpected code reached'
   end
 
-  def in_progress_for?(type = :development)
+  def in_progress_for?(type)
     @actual_work[type] > 0 && !done_for?(type)
   end
 
-  def done_for?(type = :development)
+  def done_for?(type)
     @expected_work[type] <= @actual_work[type]
   end
 end

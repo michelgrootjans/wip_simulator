@@ -89,7 +89,7 @@ describe "A project" do
     end
   end
 
-  context "with two stories(1) and 2 developers" do
+  xcontext "with two stories(1) and 2 developers" do
     let(:story_1) { build(:story) }
     let(:story_2) { build(:story) }
     let(:backlog) { [story_1, story_2] }
@@ -105,6 +105,29 @@ describe "A project" do
       it { expect(project.done).to eq [story_1, story_2] }
       it { expect(story_1).to be_done }
       it { expect(story_2).to be_done }
+    end
+  end
+
+  context "with development and qa" do
+    let(:story) { build(:story, expected_work: {development: 1, qa: 1}) }
+    let(:backlog) { [story] }
+
+    let(:developer) { build(:developer) }
+    let(:tester) { build(:tester) }
+    let(:team) { [developer, tester] }
+
+    it{ expect(story).to be_ready_for(:development) }
+
+    context "after one tick" do
+      before { project.tick }
+
+      it{ expect(story).to be_ready_for(:qa) }
+    end
+
+    xcontext "after two ticks" do
+      before { project.tick(2) }
+
+      it{ expect(story).to be_done }
     end
   end
 end
