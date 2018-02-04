@@ -8,7 +8,9 @@ class Project
   end
 
   def tick(repeat = 1)
-    repeat.times{ backlog.first.decrement }
+    repeat.times do
+       backlog.first.decrement if backlog.any?
+    end
   end
 
   def backlog
@@ -35,7 +37,6 @@ class Story
     @estimate <= 0
   end
 end
-
 
 require 'factory_bot'
 require 'faker'

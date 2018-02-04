@@ -1,4 +1,3 @@
-
 describe "A project" do
   subject(:project){ Project.new(backlog) }
 
@@ -8,7 +7,7 @@ describe "A project" do
   end
 
   context "with one story(1)" do
-    let(:story) { Story.new }
+    let(:story) { build(:story) }
     let(:backlog) { [story] }
 
     it { is_expected.not_to be_finished }
@@ -22,10 +21,10 @@ describe "A project" do
       it { expect(project.backlog).to eq [] }
       it { expect(project.done).to eq [story] }
       it { expect(story).to be_done }
-    end
+    end 
     
     context "after two ticks" do
-      before { project.tick }
+      before { project.tick(2) }
       it { is_expected.to be_finished }
       it { expect(project.backlog).to eq [] }
       it { expect(project.done).to eq [story] }
@@ -34,8 +33,8 @@ describe "A project" do
   end
 
   context "with two stories(1)" do
-    let(:story_1) { build(:story, name: "story 1") }
-    let(:story_2) { build(:story, name: "story 2") }
+    let(:story_1) { build(:story) }
+    let(:story_2) { build(:story) }
     let(:backlog) { [story_1, story_2] }
 
     it { is_expected.not_to be_finished }

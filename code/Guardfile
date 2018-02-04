@@ -32,7 +32,7 @@ options = {
 }
 guard :rspec, options do
   require "guard/rspec/dsl"
-  clearing :on
+  clearing :off
   dsl = Guard::RSpec::Dsl.new(self)
 
   # Feel free to open issues for suggestions and improvements
