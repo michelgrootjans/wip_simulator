@@ -1,5 +1,6 @@
 describe "A project" do
-  subject(:project){ Project.new(backlog) }
+  let(:team) { [Developer.new] }
+  subject(:project){ Project.new(backlog, team) }
 
   context "with an empty backlog" do
     let(:backlog) { [] }
@@ -37,18 +38,12 @@ describe "A project" do
     let(:story_2) { build(:story) }
     let(:backlog) { [story_1, story_2] }
 
-    it { is_expected.not_to be_finished }
-    it { expect(project.backlog).to eq [story_1, story_2] }
-    it { expect(project.done).to eq [] }
-    it { expect(story_1).not_to be_done }
-    it { expect(story_2).not_to be_done }
-    
     context "after one tick" do
       before { project.tick }
       it { is_expected.not_to be_finished }
       it { expect(project.backlog).to eq [story_2] }
       it { expect(project.done).to eq [story_1] }
-        it { expect(story_1).to be_done }
+      it { expect(story_1).to be_done }
       it { expect(story_2).not_to be_done }
       end
     
@@ -59,6 +54,25 @@ describe "A project" do
       it { expect(project.done).to eq [story_1, story_2] }
       it { expect(story_1).to be_done }
       it { expect(story_2).to be_done }
-      end
+    end
+  end
+
+  context "with two stories(1) and 2 developers" do
+    let(:story_1) { build(:story, name: 'Story 1') }
+    let(:story_2) { build(:story, name: 'Story 2') }
+    let(:backlog) { [story_1, story_2] }
+
+    let(:dev_1) { build(:developer, name: 'Dev 1') }
+    let(:dev_2) { build(:developer, name: 'Dev 2') }
+    let(:team) { [dev_1, dev_2] }
+
+    context "after one tick" do
+      before { project.tick }
+      it { is_expected.to be_finished }
+      it { expect(project.backlog).to eq [] }
+      it { expect(project.done).to eq [story_1, story_2] }
+      it { expect(story_1).to be_done }
+      it { expect(story_2).to be_done }
+    end
   end
 end

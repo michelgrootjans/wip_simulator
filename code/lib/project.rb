@@ -1,6 +1,7 @@
 class Project
-  def initialize(backlog)
+  def initialize(backlog, team)
     @stories = backlog
+    @team = team
   end
 
   def finished?
@@ -9,7 +10,9 @@ class Project
 
   def tick(repeat = 1)
     repeat.times do
-       backlog.first.decrement if backlog.any?
+      @team.each do |developer|
+        backlog.first.decrement if backlog.any?
+      end
     end
   end
 
@@ -38,12 +41,20 @@ class Story
   end
 end
 
+class Developer
+  attr_accessor :name
+end
+
 require 'factory_bot'
 require 'faker'
 
 FactoryBot.define do
   factory :story do
     name { Faker::Hacker.say_something_smart }
+  end
+
+  factory :developer do
+    name { Faker::Name.name }
   end
 
 end
