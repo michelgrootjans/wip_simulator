@@ -1,18 +1,28 @@
-# class TeamMember
-#   attr_accessor :name
-  
-#   def to_s
-#     name
-#   end
+class TeamMember
+  attr_accessor :skill
 
-# end
+  def take(story)
+    @story = story
+  end
 
-# require 'factory_bot'
-# require 'faker'
+  def work
+    @story.do_work(skill) if @story
+  end
 
-# FactoryBot.define do
-#   factory :team_member do
-#     name { Faker::Name.name }
-#   end
+  def busy?
+    return false unless @story
+    !@story.done_for?(skill)
+  end
+end
 
-# end
+require 'factory_bot'
+require 'faker'
+
+FactoryBot.define do
+  factory :team_member do
+    factory :developer do
+      skill :development
+    end
+  end
+
+end

@@ -67,7 +67,7 @@ describe "A project" do
   end
 
   context "with one story(2)" do
-    let(:story) { build(:story, duration: 2) }
+    let(:story) { build(:story, expected_work: {development: 2}) }
     let(:backlog) { [story] }
 
     context "after one tick" do
@@ -77,7 +77,7 @@ describe "A project" do
       it { expect(project.wip).to eq [story] }
       it { expect(project.done).to eq [] }
       it { expect(story).not_to be_done }
-      end
+    end
     
     context "after two ticks" do
       before { project.tick(2) }
