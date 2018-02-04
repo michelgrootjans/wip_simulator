@@ -27,8 +27,7 @@
 options = {
   cmd: "bundle exec rspec",
   all_on_start: true,
-  keep_failed: true,
-  focus_on_failed: true
+  failed_mode: :keep
 }
 guard :rspec, options do
   require "guard/rspec/dsl"
