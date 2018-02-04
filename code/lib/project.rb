@@ -1,27 +1,24 @@
 class Project
-  def initialize(backlog, team)
-    @stories = backlog
-    @team = team
-  end
+  attr_accessor :backlog, :team
 
   def finished?
-    backlog.empty?
+    todo.empty?
   end
 
   def tick(repeat = 1)
     repeat.times do
       @team.each do |developer|
-        backlog.first.decrement if backlog.any?
+        todo.first.decrement if todo.any?
       end
     end
   end
 
-  def backlog
-    @stories - done
+  def todo
+    backlog - done
   end
   
   def done
-    @stories.select(&:done?)
+    backlog.select(&:done?)
   end
 end
 
@@ -49,6 +46,11 @@ require 'factory_bot'
 require 'faker'
 
 FactoryBot.define do
+  factory :project do
+    backlog { build_list(:story, 3) }
+    team { build_list(:developer, 3) }
+  end
+
   factory :story do
     name { Faker::Hacker.say_something_smart }
   end
