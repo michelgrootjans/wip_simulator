@@ -2,44 +2,60 @@ class Project
   attr_accessor :backlog, :team
 
   def finished?
-    todo.empty?
+    backlog == done
   end
 
   def tick(repeat = 1)
     repeat.times do
       @team.each do |developer|
-        todo.first.decrement if todo.any?
+        not_done.first.do_work if not_done.any?
       end
     end
   end
 
+  def wip
+    backlog.select(&:in_progress?)
+  end
+
   def todo
-    backlog - done
+    backlog.select(&:todo?)
   end
   
   def done
     backlog.select(&:done?)
   end
+
+  def not_done
+    backlog - done
+  end
 end
 
 class Story
-  attr_accessor :name
+  attr_accessor :duration
 
   def initialize
-    @estimate = 1
+    @duration = 1
+    @work = 0
   end
 
-  def decrement
-    @estimate -= 1
+  def do_work
+    @work += 1
   end
 
   def done?
-    @estimate <= 0
+    @duration <= @work
+  end
+
+  def todo?
+    @work == 0
+  end
+
+  def in_progress?
+    @work > 0 && !done?
   end
 end
 
 class Developer
-  attr_accessor :name
 end
 
 require 'factory_bot'
@@ -52,11 +68,9 @@ FactoryBot.define do
   end
 
   factory :story do
-    name { Faker::Hacker.say_something_smart }
   end
 
   factory :developer do
-    name { Faker::Name.name }
   end
 
 end
