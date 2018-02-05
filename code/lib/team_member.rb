@@ -5,10 +5,6 @@ class TeamMember
     @story = story
   end
 
-  def choose_from(backlog)
-    @story = backlog.first{|story| story.ready_for?(skill)}
-  end
-
   def work
     @story.do_work(skill) if @story
   end

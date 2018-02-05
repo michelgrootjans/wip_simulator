@@ -89,7 +89,7 @@ describe "A project" do
     end
   end
 
-  xcontext "with two stories(1) and 2 developers" do
+  context "with two stories(1) and 2 developers" do
     let(:story_1) { build(:story) }
     let(:story_2) { build(:story) }
     let(:backlog) { [story_1, story_2] }
