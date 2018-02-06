@@ -1,6 +1,7 @@
 class Project
   attr_reader :backlog, :wip, :done
   def team=(t)
+    @team = t
   end
 
   def planning=(p)
@@ -10,18 +11,20 @@ class Project
   end
   
   def tick
-    if(@wip.empty?)
-      new_story = @backlog.shift
-      @wip.push(new_story) if new_story
-    end
+    @team.each do
+      if(@wip.empty?)
+        new_story = @backlog.shift
+        @wip.push(new_story) if new_story
+      end
 
-    unless @wip.empty?
-      story_to_work_on = @wip.first
-      story_to_work_on.do_work(:development) if story_to_work_on
-    end
+      unless @wip.empty?
+        story_to_work_on = @wip.first
+        story_to_work_on.do_work(:development) if story_to_work_on
+      end
 
-    @wip.select(&:done?).each do |done_story|
-      @done.push(@wip.delete(done_story))
+      @wip.select(&:done?).each do |done_story|
+        @done.push(@wip.delete(done_story))
+      end
     end
   end
 

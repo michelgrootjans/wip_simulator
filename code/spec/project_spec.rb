@@ -2,8 +2,7 @@ describe "A project" do
   subject(:project) { build(:project, team: team, planning: planning) }
   
   context "with one developer and one develpment(1) story" do
-    let(:developer) { build :developer }
-    let(:team) { [developer] }
+    let(:team) { [build(:developer)] }
     let(:story) { build(:story, expected_work: {development: 1})}
     let(:planning) { [story] }
 
@@ -23,8 +22,7 @@ describe "A project" do
   end
 
   context "with one developer and one develpment(2) story" do
-    let(:developer) { build :developer }
-    let(:team) { [developer] }
+    let(:team) { [build(:developer)] }
     let(:story) { build(:story, expected_work: {development: 2})}
     let(:planning) { [story] }
 
@@ -53,8 +51,7 @@ describe "A project" do
   end
 
   context "with one developer and two develpment(1) stories" do
-    let(:developer) { build :developer }
-    let(:team) { [developer] }
+    let(:team) { [build(:developer)] }
     let(:story_1) { build(:story, expected_work: {development: 1})}
     let(:story_2) { build(:story, expected_work: {development: 1})}
     let(:planning) { [story_1, story_2] }
@@ -62,7 +59,6 @@ describe "A project" do
     it { expect(project.backlog).to eq [story_1, story_2]}
     it { expect(project.wip).to eq []}
     it { expect(project.done).to eq []}
-    it { is_expected.not_to be_done }
     it { is_expected.not_to be_done }
 
     context "after one tick" do
@@ -86,9 +82,7 @@ describe "A project" do
 
 
   context "with two developers and two develpment(1) stories" do
-    let(:developer_1) { build :developer }
-    let(:developer_2) { build :developer }
-    let(:team) { [developer_1, developer_2] }
+    let(:team) { build_list(:developer, 2) }
     let(:story_1) { build(:story, expected_work: {development: 1})}
     let(:story_2) { build(:story, expected_work: {development: 1})}
     let(:planning) { [story_1, story_2] }
@@ -97,19 +91,9 @@ describe "A project" do
     it { expect(project.wip).to eq []}
     it { expect(project.done).to eq []}
     it { is_expected.not_to be_done }
-    it { is_expected.not_to be_done }
 
     context "after one tick" do
       before { project.tick }
-
-      it { expect(project.backlog).to eq [story_2]}
-      it { expect(project.wip).to eq []}
-      it { expect(project.done).to eq [story_1]}
-      it { is_expected.not_to be_done }
-    end
-
-    context "after two ticks" do
-      before { 2.times{project.tick} }
 
       it { expect(project.backlog).to eq []}
       it { expect(project.wip).to eq []}
