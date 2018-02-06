@@ -1,33 +1,32 @@
 class Project
-  attr_accessor :backlog, :team
-
-  def finished?
-    backlog == done
+  attr_reader :backlog, :wip, :done
+  def team=(t)
   end
 
-  def tick(repeat = 1)
-    repeat.times do
-      @team.each do |developer|
-        developer.take(todo.first) unless developer.busy?
-        developer.work
-      end
+  def planning=(p)
+    @backlog  = p
+    @wip = []
+    @done = []
+  end
+  
+  def tick
+    if(@wip.empty?)
+      new_story = @backlog.shift
+      @wip.push(new_story) if new_story
+    end
+
+    unless @wip.empty?
+      story_to_work_on = @wip.first
+      story_to_work_on.do_work(:development) if story_to_work_on
+    end
+
+    @wip.select(&:done?).each do |done_story|
+      @done.push(@wip.delete(done_story))
     end
   end
 
-  def wip
-    backlog.select(&:in_progress?)
-  end
-
-  def todo
-    backlog.select(&:todo?)
-  end
-  
-  def done
-    backlog.select(&:done?)
-  end
-
-  def not_done
-    backlog - done
+  def done?
+    @backlog.empty? && @wip.empty?
   end
 end
 
@@ -36,7 +35,7 @@ require 'faker'
 
 FactoryBot.define do
   factory :project do
-    backlog { build_list(:story, 3) }
+    planning { build_list(:story, 3) }
     team { build_list(:developer, 3) }
   end
 end
