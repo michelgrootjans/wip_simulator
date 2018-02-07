@@ -1,13 +1,20 @@
 version: '3'
 services:
-  simulator:
+  generation:
     image: ruby:2.3.3
     volumes:
     - .bundle:/usr/local/bundle
     - ./code:/simulator
     working_dir: /simulator
-    command: sh run.sh
-  test:
+    command: sh generate.sh
+  simulation:
+    image: ruby:2.3.3
+    volumes:
+    - .bundle:/usr/local/bundle
+    - ./code:/simulator
+    working_dir: /simulator
+    command: sh simulate.sh
+  specs:
     image: ruby:2.3.3
     volumes:
     - .bundle:/usr/local/bundle
