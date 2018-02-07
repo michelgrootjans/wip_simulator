@@ -1,5 +1,5 @@
 class TeamMember
-  attr_accessor :skill
+  attr_accessor :skill, :name
 
   def take(story)
     @story = story
@@ -17,6 +17,10 @@ class TeamMember
   def idle?
     !busy?
   end
+
+  def to_json
+    {name: name, skill: skill}
+  end
 end
 
 require 'factory_bot'
@@ -24,6 +28,8 @@ require 'faker'
 
 FactoryBot.define do
   factory :team_member do
+    name { Faker::Name.name }
+
     factory :developer do
       skill :development
     end

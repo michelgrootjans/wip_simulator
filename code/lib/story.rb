@@ -1,5 +1,6 @@
 class Story
   attr_reader :expected_work
+  attr_accessor :name
 
   def initialize
     @expected_work = {development: 1}
@@ -50,6 +51,10 @@ class Story
   def done_for?(type)
     @expected_work[type] <= @actual_work[type]
   end
+
+  def to_json
+    { name: name, expected_work: expected_work}
+  end
 end
 
 require 'factory_bot'
@@ -57,5 +62,6 @@ require 'faker'
 
 FactoryBot.define do
   factory :story do
+    sequence(:name)
   end
 end
