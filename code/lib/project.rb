@@ -1,4 +1,6 @@
 class Project
+  attr_reader :columns
+
   def team=(t)
     @team = t
   end
