@@ -1,6 +1,6 @@
-class Project
-  attr_reader :columns
+require_relative 'throw_over_the_wall'
 
+class Project
   def team=(t)
     @team = t
   end
@@ -11,77 +11,39 @@ class Project
   end
 
   def process=(p)
-    @process = {}
-    p.each do |work_column, queues|
-      wait_queues = queues.symbolize_keys
-      @process[work_column.to_sym] = {from: wait_queues[:from].to_sym, to: wait_queues[:to].to_sym}
-    end
+    @process = p
     initialize_process
   end
 
+  def team_strategy=(strategy)
+    @team_strategy = strategy
+  end
+
   def column(name)
-    @columns[name]
+    @board.column(name)
+  end
+
+  def columns
+    @board.columns
   end
 
   def tick
     @team.each do |member|
-      unless member.busy?
-        in_queue = in_queue_for(member.skill)
-        work_queue = work_queue_for(member.skill)
-
-        story = in_queue.shift
-        if(story)
-          work_queue.push(story)
-          member.take(story)
-        end
-      end
+      @team_strategy.choose_story_for(member, @board)
       member.work
     end
-    @process.keys.each do |skill|
-      finished = work_queue_for(skill).select{|s| s.done_for?(skill)}
-      finished.each do |story|
-        work_queue_for(skill).delete(story)
-         out_queue_for(skill).push(story)
-      end
-    end
+    @board.advance_stories
   end
 
   def done?
-    @last_column.count == @backlog.count
+    @board.done?
   end
-
 
   private
-  def work_queue_for(skill)
-    @columns[skill]
-  end
-
-  def in_queue_for(skill)
-    in_queue_name = @process[skill][:from]
-    @columns[in_queue_name]
-  end
-
-  def out_queue_for(skill)
-    out_queue_name = @process[skill][:to]
-    @columns[out_queue_name]
-  end
-
 
   def initialize_process
-    @columns = {}
     return unless @process
-
-    @process.each do |work_type, queues|
-      @columns[queues[:from]] = []
-      @columns[work_type] = []
-      @columns[queues[:to]] = []
-    end
-
-    backlog = @process.first.last[:from]
-    @columns[backlog] = @backlog.dup if @backlog
-
-    done = @process.to_a.last.last[:to]
-    @last_column = @columns[done]
+    @board = KanbanBoard.new(@process, @backlog)
   end
 end
 
@@ -93,5 +55,6 @@ FactoryBot.define do
     planning { build_list(:story, 3) }
     team { build_list(:developer, 3) }
     process { {development: {from: :backlog, to: :done}} }
+    team_strategy ThrowOverTheWall.new
   end
 end
