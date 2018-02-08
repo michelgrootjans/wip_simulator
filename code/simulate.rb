@@ -17,10 +17,9 @@ def load_backlog
 end
 
 def print_board(project)
-  puts "development: #{project.columns[:development].map {|story| story.name}.join(", ")}"
-  puts "ready_for_qa: #{project.columns[:ready_for_qa].map {|story| story.name}.join(", ")}"
-  puts "qa: #{project.columns[:qa].map {|story| story.name}.join(", ")}"
-  puts "done: #{project.columns[:done].map {|story| story.name}.join(", ")}"
+  project.columns.each do |column|
+    puts "#{column.first}: #{column.last.count}"
+  end
 end
 
 process = load_process
