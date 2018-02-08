@@ -22,7 +22,7 @@ def print_board(project)
     puts "************"
     puts column.first
     puts "------------"
-    puts column.last
+    puts column.last.map(&:name)
   end
 end
 
