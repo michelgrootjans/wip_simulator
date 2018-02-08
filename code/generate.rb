@@ -9,9 +9,7 @@ backlog = (1..100).map{ build(:story, expected_work: { development: development_
 team = build_list(:developer, 3) + build_list(:tester, 1)
 process = {development: {from: :backlog, to: :ready_for_qa}, qa: {from: :ready_for_qa, to: :done}}
 
-backlog.each{|story| puts story.inspect}
-team.each{|member| puts member.inspect}
-process.inspect
+Dir.mkdir('data') unless Dir.exist?('data')
 
 File.open("data/backlog.json","w") do |f|
   f.write(JSON.pretty_generate(backlog.map(&:to_json)))
