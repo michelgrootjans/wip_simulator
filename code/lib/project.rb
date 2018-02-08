@@ -11,14 +11,18 @@ class Project
   end
 
   def process=(p)
-    @process = p
+    @process = {}
+    p.each do |work_column, queues|
+      wait_queues = queues.symbolize_keys
+      @process[work_column.to_sym] = {from: wait_queues[:from].to_sym, to: wait_queues[:to].to_sym}
+    end
     initialize_process
   end
 
   def column(name)
     @columns[name]
   end
-  
+
   def tick
     @team.each do |member|
       unless member.busy?
@@ -66,6 +70,7 @@ class Project
   def initialize_process
     @columns = {}
     return unless @process
+
     @process.each do |work_type, queues|
       @columns[queues[:from]] = []
       @columns[work_type] = []
@@ -73,7 +78,7 @@ class Project
     end
 
     backlog = @process.first.last[:from]
-    @columns[backlog] = @backlog.dup
+    @columns[backlog] = @backlog.dup if @backlog
 
     done = @process.to_a.last.last[:to]
     @last_column = @columns[done]

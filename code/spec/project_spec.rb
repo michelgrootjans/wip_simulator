@@ -1,3 +1,16 @@
+describe "Project initialization" do
+  subject(:project){ Project.new }
+  it "with symbol-based process" do
+    project.process = {development: {from: :todo, to: :done}}
+    expect(project.columns.keys).to eq [:todo, :development, :done]
+  end
+
+  it "with string-based process" do
+    project.process = {"development" => {"from" => "todo", "to" => "done"}}
+    expect(project.columns.keys).to eq [:todo, :development, :done]
+  end
+end
+
 describe "A project" do
   subject(:project) { build(:project, team: team, planning: planning, process: process) }
   let(:process) { {development: {from: :backlog, to: :done}} }
