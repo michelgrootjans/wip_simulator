@@ -5,6 +5,7 @@ class Story
   def initialize
     @expected_work = {development: 1}
     @actual_work = Hash.new(0)
+    @lead_time = 0
   end
 
   def expected_work=(work)
@@ -30,6 +31,20 @@ class Story
     work_types.all? do |type|
       @actual_work[type] >= expected_work[type]
     end
+  end
+
+  def to_do?
+    work_types.all? do |type|
+      @actual_work[type] == 0
+    end
+  end
+
+  def tick
+    @lead_time += 1
+  end
+
+  def lead_time
+    @lead_time
   end
 
   def do_work(type)

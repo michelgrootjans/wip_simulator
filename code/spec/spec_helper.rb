@@ -1,5 +1,6 @@
 Dir["lib/*.rb"].each {|file| require_relative "../#{file}" }
 require 'factory_bot'
+require 'pry'
 include FactoryBot::Syntax::Methods
 
 RSpec.configure do |config|

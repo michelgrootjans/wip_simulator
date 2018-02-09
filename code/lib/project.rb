@@ -1,8 +1,25 @@
 require_relative 'throw_over_the_wall'
 
 class Project
+
+  def initialize
+    @days = 0
+  end
+
   def team=(t)
     @team = t
+  end
+
+  # expressed in number of stories/tick
+  def throughput
+    return 0 if @days == 0
+    1.0 * @board.done.count / @days
+  end
+
+  # expressed in number of ticks
+  def lead_time
+    return "n/a" if @board.done.count == 0
+    1.0 * @board.done.map(&:lead_time).reduce(&:+) / @board.done.count
   end
 
   def planning=(p)
@@ -28,10 +45,12 @@ class Project
   end
 
   def tick
+    @days += 1
     @team.each do |member|
       @team_strategy.choose_story_for(member, @board)
       member.work
     end
+    @board.tick
     @board.advance_stories
   end
 

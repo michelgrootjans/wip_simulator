@@ -15,6 +15,7 @@ class KanbanBoard
 
     first_column_name = @process.first.last[:from]
     @columns[first_column_name] = backlog.dup
+    @first_column = @columns[first_column_name]
 
     last_column_name = @process.to_a.last.last[:to]
     @last_column = @columns[last_column_name]
@@ -56,6 +57,10 @@ class KanbanBoard
     @last_column.count == @number_of_stories
   end
 
+  def done
+    @last_column
+  end
+
   def work_queue_for(skill)
     @columns[skill]
   end
@@ -68,5 +73,17 @@ class KanbanBoard
   def out_queue_for(skill)
     out_queue_name = @process[skill][:to]
     @columns[out_queue_name]
+  end
+
+  def columns_in_progress
+    @columns.values - [@first_column, @last_column]
+  end
+
+  def tick
+    columns_in_progress.each do |stories|
+      stories.each do |story|
+        story.tick
+      end
+    end
   end
 end
