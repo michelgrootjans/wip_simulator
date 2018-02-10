@@ -1,6 +1,7 @@
 require_relative 'throw_over_the_wall'
 
 class Project
+  attr_reader :team_strategy
 
   def initialize
     @days = 0

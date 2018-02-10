@@ -1,5 +1,5 @@
 class TeamMember
-  attr_accessor :skill, :name
+  attr_accessor :skill, :name, :story
 
   def take(story)
     @story = story

@@ -2,7 +2,6 @@ class KanbanBoard
   attr_reader :columns
 
   def initialize(process, backlog)
-
     backlog ||= []
     @number_of_stories = backlog.count
     @process = string_to_sym(process)
@@ -47,6 +46,14 @@ class KanbanBoard
         out_queue_for(skill).push(story)
       end
     end
+  end
+
+  def stories_in_progress
+    @columns.values.flatten - @first_column - @last_column
+  end
+
+  def increases_wip?(skill)
+    @process.keys.first == skill
   end
 
   def column(name)

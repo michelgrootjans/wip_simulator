@@ -24,14 +24,23 @@ end
 
 process = load_process
 team = load_team
-backlog = load_backlog
 
-project = build(:project, process: process, team: team, planning: backlog)
+strategies = [
+    ThrowOverTheWall.new,
+    LimitWIPForTheWholeProject.new(1),
+    LimitWIPForTheWholeProject.new(2),
+    LimitWIPForTheWholeProject.new(3),
+    LimitWIPForTheWholeProject.new(4),
+    LimitWIPForTheWholeProject.new(5),
+    LimitWIPForTheWholeProject.new(6),
+]
 
-day = 1
-while !project.done? do
-  puts "*** end of day #{day} ****"
-  project.tick
-  print_board(project)
-  day += 1
+strategies.each do |strategy|
+  backlog = load_backlog
+  project = build(:project, process: process, team: team, planning: backlog.dup, team_strategy: strategy)
+  project.tick while !project.done?
+  puts "*** strategy: #{project.team_strategy} ***"
+  puts "throughput: #{"%.2g" % project.throughput} stories/tick"
+  puts "lead time per story: #{"%.2g" % project.lead_time} ticks"
+  puts
 end
