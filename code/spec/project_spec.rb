@@ -143,6 +143,9 @@ describe "A project" do
       it { expect(project.column(:development)).to eq [story_1, story_2]}
       it { expect(project.column(:done)).to eq []}
       it { is_expected.not_to be_done }
+
+      it { expect(project.throughput).to eq 0 }
+      it { expect(project.lead_time).to eq "n/a" }
     end
 
     context "after two ticks" do
@@ -152,6 +155,9 @@ describe "A project" do
       it { expect(project.column(:development)).to eq [story_1]}
       it { expect(project.column(:done)).to eq [story_2]}
       it { is_expected.not_to be_done }
+
+      it { expect(project.throughput).to eq 0.5 }
+      it { expect(project.lead_time).to eq 2 }
     end
 
     context "after three ticks" do
@@ -161,6 +167,9 @@ describe "A project" do
       it { expect(project.column(:development)).to eq []}
       it { expect(project.column(:done)).to eq [story_2, story_1]}
       it { is_expected.to be_done }
+
+      it { expect(project.throughput).to eq 2.0/3 }
+      it { expect(project.lead_time).to eq 2.5 }
     end
   end
 
@@ -200,6 +209,9 @@ describe "A project" do
       it { expect(project.column(:qa)).to eq []}
       it { expect(project.column(:done)).to eq [story]}
       it { is_expected.to be_done }
+
+      it { expect(project.throughput).to eq 0.5 }
+      it { expect(project.lead_time).to eq 2 }
     end
   end
 
@@ -240,6 +252,9 @@ describe "A project" do
       it { expect(project.column(:qa)).to eq []}
       it { expect(project.column(:done)).to eq [story_1]}
       it { is_expected.not_to be_done }
+
+      it { expect(project.throughput).to eq 0.5 }
+      it { expect(project.lead_time).to eq 2 }
     end
 
     context "after three ticks" do
@@ -251,6 +266,9 @@ describe "A project" do
       it { expect(project.column(:qa)).to eq []}
       it { expect(project.column(:done)).to eq [story_1, story_2]}
       it { is_expected.to be_done }
+
+      it { expect(project.throughput).to eq 2.0/3 }
+      it { expect(project.lead_time).to eq 2 }
     end
   end
 end
